@@ -3,5 +3,5 @@ This is Dan Whitt's ROMS source code directory modified from the Rutgers-ROMS co
 It contains FRONTAL ZONE and column model version of the Fox-Kemper et al. 2008 parameterization. It also contains modified NPZD model code from 
 <br>Whitt, D. B., John Ryan Taylor, and Marina Lévy. "Synoptic‐to‐planetary scale wind variability enhances phytoplankton biomass at ocean fronts." Journal of Geophysical Research: Oceans (2017).
 <br>Whitt, D. B., Marina Lévy, and John Ryan Taylor. "Low‐frequency and high‐frequency oscillatory winds synergistically enhance nutrient entrainment and phytoplankton at fronts." Journal of Geophysical Research: Oceans 122.2 (2017): 1016-1041.
-<br>Whitt, D. B., Marina Levy, and John Ryan Taylor, "Wind-driven submesoscales enhance turbulent nutrient entrainment and phytoplankton accumulation during an autumn storm" To be submitted
+<br>Whitt, D. B., Marina Levy, and John Ryan Taylor, "Submesoscales enhance storm-driven vertical mixing of nutrients: insights from a biogeochemical large eddy simulation." Submitted.
 <br>WARNING: THIS IS WORK IN PROGRESS - it is not designed to be used as is by others and it is certainly not a "black box". 
