@@ -45,36 +45,45 @@
 #define UV_ADV
 #define UV_COR
 #define UV_LDRAG
-#define UV_VIS2
+#undef UV_VIS2
+#define UV_VIS4
 
 #define ANA_GRID
-#define ANA_INITIAL
+#undef ANA_INITIAL
 #define SOLVE3D
+#undef SALINITY
+#define ANA_SPONGE
 
 #ifdef SOLVE3D
 # define DJ_GRADPS
-# define TS_DIF2
+# undef TS_DIF2
+# define TS_DIF4
 # define MIX_S_TS
 # define MIX_S_UV
 # define ANA_SMFLUX
+# define ANA_SRFLUX
 # define ANA_STFLUX
 # define ANA_BTFLUX
+#define DIFF_3DCOEF
+#define VISC_3DCOEF
+#define HMIX_BL
 #endif
 
 #ifdef NLM_DRIVER
 # define AVERAGES
 #endif
+#undef AVERAGES
+#undef DIAGNOSTICS_UV
+#undef DIAGNOSTICS_TS
 
-#define OUT_DOUBLE
+#define LMD_MIXING
 
-/*
-**-----------------------------------------------------------------------------
-**  Adjoint-based algorithms settings.
-**-----------------------------------------------------------------------------
-*/
-
-#ifdef OPT_PERTURBATION
-# define FORWARD_READ
-# define FORWARD_MIXING
+#ifdef LMD_MIXING
+# define LMD_RIMIX
+# define LMD_CONVEC
+#define LMD_SKPP
+/*#define LMD_BKPP*/
+#define LMD_NONLOCAL
+#define LMD_SHAPIRO
 #endif
-
+#define INLINE_2DIO

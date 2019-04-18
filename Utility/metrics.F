@@ -286,7 +286,11 @@
       real(r8), parameter :: Large = 1.0E+20_r8
 #if defined DIFF_3DCOEF || defined VISC_3DCOEF
       real(r8), parameter :: PecletCoef = 1.0_r8 / 12.0_r8
+#if defined CHANNEL2
+      real(r8), parameter :: Uscale = 0.015_r8
+#else
       real(r8), parameter :: Uscale = 0.1_r8
+#endif
 #endif
       real(r8) :: cff, cff1, cff2
       real(r8) :: my_DXmax, my_DXmin, my_DYmax, my_DYmin

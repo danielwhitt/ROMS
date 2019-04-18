@@ -665,7 +665,8 @@
      &         Ssqr(ng)/9.81_r8/Tcoef(ng)*                              &
      & (1.0_r8-TANH((yr(i,j)-yc_bcz(ng))/Lf_bcz(ng))**2.0_r8)*          &
 ! 16.67 is artificial amplification factor
-     &         Hz(i,j,k)/(pm(i,j)*pn(i,j))*(-16.67*0.06_r8*1970_r8      &
+!     &         Hz(i,j,k)/(pm(i,j)*pn(i,j))*(-16.67*0.06_r8*1970_r8      &
+     &         Hz(i,j,k)/(pm(i,j)*pn(i,j))*(-0.06_r8*1970_r8            &
 !     &     /(ABS(Ssqr(ng)*hmld(i,j)/(coriolis(ng)**2.0_r8))*            &
 !     & SQRT(1.0_r8+(coriolis(ng)**2.0_r8)*9.81_r8*0.03_r8/ABS(hmld(i,j))&
 !     & /1027_r8/(Ssqr(ng)**2.0_r8)))                                    &

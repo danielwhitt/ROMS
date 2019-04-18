@@ -51,6 +51,8 @@
 
 #define BC_ZONE
 #define FOXKEMPER
+/* NOTE: viscous transport of the background momentum only works with splines on right now*/
+#define BC_ZONE_MOMFLX
 
 #define LMD_MIXING
 /*#define RI_HORAVG*/

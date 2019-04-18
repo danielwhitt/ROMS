@@ -1,4 +1,4 @@
-!  100x100 WT17 corrected stress, interpolated initial from LES 
+!  WT17 BIO original stress (.3 N/m2) 4x4, interpolated from LES WT17, w FFH, coefficient = 1, deeper MLD definition (.03), default .005
 !  ROMS/TOMS Standard Input parameters.
 !
 !svn $Id: ofz_base.in 585 2012-01-03 18:44:28Z arango $
@@ -82,8 +82,8 @@
 ! Grid dimension parameters. See notes below in the Glossary for how to set
 ! these parameters correctly.
 
-          Lm == 50         ! Number of I-direction INTERIOR RHO-points
-          Mm == 50        ! Number of J-direction INTERIOR RHO-points
+          Lm == 2         ! Number of I-direction INTERIOR RHO-points
+          Mm == 2        ! Number of J-direction INTERIOR RHO-points
            N == 160          ! Number of vertical levels
 
         Nbed =  0            ! Number of sediment bed layers
@@ -97,8 +97,8 @@
 ! shared-memory configurations used to determine tile horizontal range
 ! indices (Istr,Iend) and (Jstr,Jend), [1:Ngrids].
 
-      NtileI == 6                               ! I-direction partition
-      NtileJ == 6                              ! J-direction partition
+      NtileI == 1                               ! I-direction partition
+      NtileJ == 1                              ! J-direction partition
 
 ! Set lateral boundary conditions keyword. Notice that a value is expected
 ! for each boundary segment per nested grid for each state variable.
@@ -176,8 +176,8 @@ ad_VolCons(north) ==  F                            ! northern boundary
 ! Time-Stepping parameters.
 
 !      NTIMES ==  17281 
-      NTIMES ==  51841 
-          DT == 15.0d0
+      NTIMES ==  77761 
+          DT == 10.0d0
      NDTFAST == 20 
 
 ! Model iteration loops parameters.
@@ -199,7 +199,7 @@ ad_VolCons(north) ==  F                            ! northern boundary
 
        NRREC == 0
    LcycleRST == T
-        NRST == 51840 
+        NRST == 77760 
         NSTA == 1
         NFLT == 1
        NINFO == 1
@@ -207,13 +207,13 @@ ad_VolCons(north) ==  F                            ! northern boundary
 ! Output history, average, diagnostic files parameters.
 
      LDEFOUT == T
-        NHIS == 240 
+        NHIS == 360 
      NDEFHIS == 0 
       NTSAVG == 1
-        NAVG == 240 
+        NAVG == 360 
      NDEFAVG == 0
       NTSDIA == 1
-        NDIA == 240
+        NDIA == 360
      NDEFDIA == 0 
 
 ! Output tangent linear and adjoint models parameters.
@@ -725,7 +725,7 @@ Dout(iTvdif) == T F     ! temp_vdiff, ...    vertical diffusion
 ! Input NetCDF file names, [1:Ngrids].
 
      GRDNAME == ocean_grd.nc
-     ININAME == /glade/p/work/dwhitt/ROMS_run/ocean_iniOFZ_WT17BIO_10.nc
+     ININAME == /glade/work/dwhitt/ROMS_run/ocean_iniOFZ_WT17BIO_12.nc
      ITLNAME == ocean_itl.nc
      IRPNAME == ocean_irp.nc
      IADNAME == ocean_iad.nc
@@ -753,13 +753,13 @@ Dout(iTvdif) == T F     ! temp_vdiff, ...    vertical diffusion
 ! Output NetCDF file names, [1:Ngrids].
 
      GSTNAME == ocean_gst.nc
-     RSTNAME == /glade/p/work/dwhitt/ROMS_run/ocean_rstOFZ_WT17BIO_11_rst.nc
-     HISNAME == /glade/p/work/dwhitt/ROMS_run/ocean_hisOFZ_WT17BIO_11_rst.nc
+     RSTNAME == /glade/work/dwhitt/ROMS_run/ocean_rstOFZ_WT17BIO_25_rst_test.nc
+     HISNAME == /glade/work/dwhitt/ROMS_run/ocean_hisOFZ_WT17BIO_25_rst_test.nc
      TLMNAME == ocean_tlm.nc
      TLFNAME == ocean_tlf.nc
      ADJNAME == ocean_adj.nc
-     AVGNAME == /glade/p/work/dwhitt/ROMS_run/ocean_avgOFZ_WT17BIO_11_rst.nc
-     DIANAME == /glade/p/work/dwhitt/ROMS_run/ocean_diaOFZ_WT17BIO_11_rst.nc
+     AVGNAME == /glade/work/dwhitt/ROMS_run/ocean_avgOFZ_WT17BIO_25_rst_test.nc
+     DIANAME == /glade/work/dwhitt/ROMS_run/ocean_diaOFZ_WT17BIO_25_rst_test.nc
      STANAME == ocean_sta.nc
      FLTNAME == ocean_flt.nc
 

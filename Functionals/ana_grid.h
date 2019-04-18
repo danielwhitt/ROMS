@@ -252,6 +252,12 @@
       depth=500.0_r8
       f0=1.0E-04_r8
       beta=0.0_r8
+#elif defined CHANNEL2
+      Xsize=1000.0E+03_r8
+      Esize=2000.0E+03_r8
+      depth=3000.0_r8
+      f0=-1.0E-04_r8
+      beta=1.0E-11_r8
 #elif defined CANYON
       Xsize=128.0E+03_r8
       Esize=96.0E+03_r8

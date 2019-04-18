@@ -470,18 +470,46 @@
 ! FLAGGED - USE WITH CAUTION 
 #ifdef HMIX_BL
       DO k=1,N(ng)
+#ifdef CHANNEL2
+        Hmixzscale(k)=       0.0_r8*                                    &
+     &  (0.5_r8+0.5_r8*TANH((z_r(IstrU,JstrV,k)+500.0_r8)/80.0_r8))
+!     &  (0.5_r8-0.5_r8*TANH((z_r(1,1,k)-3500.0_r8)/80.0_r8))
+#else
         Hmixzscale(k)=0.0_r8*                                           &
-     &       EXP(-((z_r(1,1,k)+80.0_r8)/20.0_r8)**(2.0_r8))
+     &       EXP(-((z_r(JstrV,IstrU,k)+80.0_r8)/20.0_r8)**(2.0_r8))
+#endif
       END DO 
       DO k=1,N(ng)
         DO j=JstrV-1,Jend
           DO i=IstrU-1,Iend
-            visc3d_r(i,j,k)=Hviscosity(i,j)+                            &
-     &                   Hviscosity(i,j)*Hmixzscale(k) 
-            diff3d_r(i,j,k)=Hdiffusion(i,j)+                            &
-     &                      Hdiffusion(i,j)*Hmixzscale(k)
+            visc3d_r(i,j,k)=SQRT(Hviscosity(i,j))+                      &
+     &                   SQRT(Hviscosity(i,j))*Hmixzscale(k) 
+            diff3d_r(i,j,k)=SQRT(Hdiffusion(i,j))+                      &
+     &                      SQRT(Hdiffusion(i,j))*Hmixzscale(k)
          END DO
-        END DO
+       END DO
+!        DO j=JstrV-1,Jend+1
+!          DO i=Istr-1,Iend+1
+!            diff3d_v(i,j,k)=SQRT(0.5_r8*(Hdiffusion(i,j-1)+             &
+!     &                              Hdiffusion(i,j  )))+                &
+!     &        Hmixzscale(k)*SQRT(0.5_r8*(Hdiffusion(i,j-1)+             &
+!     &                              Hdiffusion(i,j  )))
+!
+!          END DO
+!        END DO
+!        DO j=Jstr-1,Jend+1
+!          DO i=IstrU-1,Iend+1
+!            diff3d_u(i,j,k)=SQRT(0.5_r8*(Hdiffusion(i-1,j)+             &
+!     &                              Hdiffusion(i  ,j)))+                &
+!     &        Hmixzscale(k)*SQRT(0.5_r8*(Hdiffusion(i-1,j)+             &
+!     &                              Hdiffusion(i, j)))
+!          END DO
+!        END DO
+        IF ((IstrU.lt.4).and.(JstrV.lt.4).and.(k.eq.100)) THEN
+        WRITE(*,*), 'HMIX',z_r(IstrU,JstrV,k),Hmixzscale(k),            &
+     &             diff3d_r(IstrU,JstrV,k),                             &
+     &             visc3d_r(IstrU,JstrV,k)
+       END IF
       END DO
 #endif
 !

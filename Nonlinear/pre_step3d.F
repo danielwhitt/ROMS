@@ -100,6 +100,9 @@
      &                      OCEAN(ng) % W,                              &
      &                      OCEAN(ng) % ru,                             &
      &                      OCEAN(ng) % rv,                             &
+#ifdef BC_ZONE
+     &                      OCEAN(ng) % uBC,                            &
+#endif
 # ifdef DIAGNOSTICS_TS
      &                      DIAGS(ng) % DiaTwrk,                        &
 # endif
@@ -149,6 +152,9 @@
 # endif
      &                            W,                                    &
      &                            ru, rv,                               &
+#ifdef BC_ZONE
+     &                            uBC,                                  &
+#endif
 # ifdef DIAGNOSTICS_TS
      &                            DiaTwrk,                              &
 # endif
@@ -217,6 +223,9 @@
       real(r8), intent(in) :: W(LBi:,LBj:,0:)
       real(r8), intent(in) :: ru(LBi:,LBj:,0:,:)
       real(r8), intent(in) :: rv(LBi:,LBj:,0:,:)
+#ifdef BC_ZONE
+      real(r8), intent(in) :: uBC(LBi:,LBj:,0:)
+#endif
 #  ifdef DIAGNOSTICS_TS
       real(r8), intent(inout) :: DiaTwrk(LBi:,LBj:,:,:,:)
 #  endif
@@ -272,6 +281,9 @@
       real(r8), intent(in) :: W(LBi:UBi,LBj:UBj,0:N(ng))
       real(r8), intent(in) :: ru(LBi:UBi,LBj:UBj,0:N(ng),2)
       real(r8), intent(in) :: rv(LBi:UBi,LBj:UBj,0:N(ng),2)
+#ifdef BC_ZONE
+      real(r8), intent(in) :: uBC(LBi:UBi,LBj:UBj,0:N(ng))
+#endif
 #  ifdef DIAGNOSTICS_TS
       real(r8), intent(inout) :: DiaTwrk(LBi:UBi,LBj:UBj,N(ng),NT(ng),  &
      &                                   NDT)
@@ -579,7 +591,8 @@
      &                   Ssqr(ng)/9.81_r8/Tcoef(ng)*                    &
      &      (1.0_r8-TANH((yr(i,j)-yc_bcz(ng))/Lf_bcz(ng))**2.0_r8)*     &
 ! 16.67 in the below line is an artificial amplification factor
-     &                       (-16.67*0.06_r8*1970_r8                    &
+!     &                       (-16.67*0.06_r8*1970_r8                    &
+     &                       (-0.06_r8*1970_r8                          &
 !     &     /(ABS(Ssqr(ng)*hmld(i,j)/(coriolis(ng)**2.0_r8))*            &
 !     & SQRT(1.0_r8+(coriolis(ng)**2.0_r8)*9.81_r8*0.03_r8/ABS(hmld(i,j))&
 !     & /1027_r8/(Ssqr(ng)**2.0_r8)))                                    &
@@ -934,7 +947,11 @@
           DO i=IstrU,Iend
             cff=1.0_r8/(z_r(i,j,k+1)+z_r(i-1,j,k+1)-                    &
      &                  z_r(i,j,k  )-z_r(i-1,j,k  ))
-            FC(i,k)=cff3*cff*(u(i,j,k+1,nstp)-u(i,j,k,nstp))*           &
+            FC(i,k)=cff3*cff*(u(i,j,k+1,nstp)-u(i,j,k,nstp)             &
+#ifdef BC_ZONE_MOMFLX
+     &                        +uBC(i,j,k+1)-uBC(i,j,k)                  &
+#endif
+     &                                                     )*           &
      &              (Akv(i,j,k)+Akv(i-1,j,k))
           END DO
         END DO

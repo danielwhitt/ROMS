@@ -415,8 +415,11 @@
      &              dt(ng)*AK(i,k)*(oHz(i,k)+oHz(i,k+1))
             cff=1.0_r8/(BC(i,k)-FC(i,k)*CF(i,k-1))
             CF(i,k)=cff*CF(i,k)
-            DC(i,k)=cff*(u(i,j,k+1,nnew)-u(i,j,k,nnew)-                 &
-     &                   FC(i,k)*DC(i,k-1))
+            DC(i,k)=cff*(u(i,j,k+1,nnew)-u(i,j,k,nnew)                  &
+#ifdef BC_ZONE_MOMFLX
+     &                   +uBC(i,j,k+1)-uBC(i,j,k)                       &
+#endif
+     &                   -FC(i,k)*DC(i,k-1))
           END DO
         END DO
 !

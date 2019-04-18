@@ -165,6 +165,15 @@
 # endif
         END DO
       END DO
+#elif defined CHANNEL2 
+      DO j=JstrT,JendT
+        DO i=IstrP,IendT
+          sustr(i,j)=0.2_r8/rho0*SIN(pi*yr(i,j)/el(ng))
+# ifdef TL_IOMS
+          tl_sustr(i,j)=0.2_r8/rho0*SIN(pi*yr(i,j)/el(ng))
+# endif
+        END DO
+      END DO
 #elif defined CHANNEL_NECK
 !!    IF ((tdays(ng)-dstart).le.4.0_r8) THEN
 !!      windamp=-0.01_r8*SIN(pi*(tdays(ng)-dstart)/8.0_r8)/rho0
@@ -371,10 +380,10 @@
 ! STORM case:
       IF (((tdays(ng)-dstart).gt.3.0_r8).AND.                           &
      &        ((tdays(ng)-dstart).lt.5.0_r8)) THEN
-        windamp=0.21_r8/rho0*((tdays(ng)-dstart)-3.0_r8)/2.0_r8
+        windamp=0.42_r8/rho0*((tdays(ng)-dstart)-3.0_r8)/2.0_r8
       ELSE IF (((tdays(ng)-dstart).gt.5.0_r8).AND.                       &
      &        ((tdays(ng)-dstart).lt.6.0_r8)) THEN
-        windamp=0.21_r8/rho0*(6.0_r8-(tdays(ng)-dstart))
+        windamp=0.42_r8/rho0*(6.0_r8-(tdays(ng)-dstart))
       ELSE
         windamp=0.0_r8/rho0
       END IF
@@ -479,10 +488,10 @@
 #elif defined FRONTAL_ZONE
       IF (((tdays(ng)-dstart).gt.3.0_r8).AND.                           &
      &        ((tdays(ng)-dstart).lt.5.0_r8)) THEN
-        windamp=-0.21_r8/rho0*((tdays(ng)-dstart)-3.0_r8)/2.0_r8
+        windamp=-0.42_r8/rho0*((tdays(ng)-dstart)-3.0_r8)/2.0_r8
       ELSE IF (((tdays(ng)-dstart).gt.5.0_r8).AND.                       &
      &        ((tdays(ng)-dstart).lt.6.0_r8)) THEN
-        windamp=-0.21_r8/rho0*(6.0_r8-(tdays(ng)-dstart))
+        windamp=-0.42_r8/rho0*(6.0_r8-(tdays(ng)-dstart))
       ELSE
         windamp=0.0_r8/rho0
       END IF

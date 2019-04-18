@@ -20,6 +20,12 @@
 #ifdef FRONTAL_ZONE
       USE IFPORT
 #endif
+#ifdef CHANNEL
+      USE IFPORT
+#endif
+#ifdef CHANNEL2
+      USE IFPORT
+#endif
 !
 ! Imported variable declarations.
 !
@@ -118,6 +124,12 @@
 #ifdef FRONTAL_ZONE
       USE IFPORT
 #endif
+#ifdef CHANNEL
+      USE IFPORT 
+#endif
+#ifdef CHANNEL2
+      USE IFPORT 
+#endif
 
 #ifdef CHANNEL
 !
@@ -178,9 +190,13 @@
       integer :: Iless, Iplus, i, itrc, j, k
 
 #ifdef CHANNEL
-      real(r8), parameter :: guscale = 40.0E+03_r8
+      real(r8), parameter :: guscale = 40000.0_r8
       real(r8), parameter :: u0 = 1.6_r8
+      integer :: rndseed
 #endif
+#ifdef CHANNEL2
+      integer :: rndseed
+#endif 
 #ifdef FRONTAL_ZONE 
       integer :: rndseed
       real(r8) :: Rigeo, Rigeo1, dTdz0, CBCZ, dTdz1, dTdz2, Rigeo2
@@ -342,7 +358,7 @@
 # else
       DO j=JstrT,JendT
         DO i=IstrT,IendT
-          val1=(yr(i,j)-y0))/guscale
+          val1=(yr(i,j)-y0)/guscale
           val2=-0.5_r8*u0*guscale*GRID(ng)%f(i,j)*sqrt(pi)/g
           zeta(i,j,1)=val2*ERF(val1)
         END DO
@@ -651,6 +667,8 @@
         END DO
       END DO
 # elif defined CHANNEL
+      rndseed=seedgen(tile)
+      CALL SRAND(rndseed)
       y0=0.5_r8*el(ng)
       DO k=1,N(ng)
         DO j=JstrT,JendT
@@ -659,13 +677,25 @@
             val2=-0.5_r8*u0*guscale*GRID(ng)%f(i,j)*SQRT(pi)/            &
      &           (Tcoef(ng)*g*h(i,j))
             val3=(val2*ERF(val1)+T0(ng))*(1.0_r8+z_r(i,j,k)/h(i,j))
-            t(i,j,k,1,itemp)=val3
+            t(i,j,k,1,itemp)=val3+                                       &
+     &        RAND(0)*0.0001_r8-0.00005_r8
           END DO
         END DO
       END DO
 #  ifdef DISTRIBUTE
       CALL mp_bcasti (ng, model, exit_flag)  ! in case of error in ERF
 #  endif
+# elif defined CHANNEL2
+      rndseed=seedgen(tile)
+      CALL SRAND(rndseed)
+      DO k=1,N(ng)
+        DO j=JstrT,JendT
+          DO i=IstrT,IendT
+        t(i,j,k,1,itemp)=8.0_r8*(EXP(z_r(i,j,k)/1000.0_r8)-0.0498_r8)/  & 
+     &       (1.0_r8 - 0.0498)+RAND(0)*0.0001_r8-0.00005_r8
+          END DO
+        END DO
+      END DO
 # elif defined CANYON
       DO k=1,N(ng)
         DO j=JstrT,JendT
@@ -1252,3 +1282,28 @@
         seedgen = abs( mod((s*181)*((pid-83)*359), 104729) )
       END FUNCTION seedgen
 #endif
+#ifdef CHANNEL 
+      FUNCTION seedgen(pid)
+        use iso_fortran_env
+        implicit none
+        integer :: seedgen
+        integer, intent(in) :: pid
+        integer :: s
+
+        call system_clock(s)
+        seedgen = abs( mod((s*181)*((pid-83)*359), 104729) )
+      END FUNCTION seedgen
+#endif
+#ifdef CHANNEL2 
+      FUNCTION seedgen(pid)
+        use iso_fortran_env
+        implicit none
+        integer :: seedgen
+        integer, intent(in) :: pid
+        integer :: s
+
+        call system_clock(s)
+        seedgen = abs( mod((s*181)*((pid-83)*359), 104729) )
+      END FUNCTION seedgen
+#endif
+

@@ -13,6 +13,7 @@
 !=======================================================================
 !
       USE mod_param
+      USE mod_grid
       USE mod_forces
       USE mod_ncparam
 !
@@ -27,6 +28,9 @@
      &                      IminS, ImaxS, JminS, JmaxS,                 &
 #ifdef SHORTWAVE
      &                      FORCES(ng) % srflx,                         &
+#endif
+#ifdef CHANNEL2
+     &                      GRID(ng) % yr,                              &
 #endif
 #ifdef TL_IOMS
      &                      FORCES(ng) % tl_stflx,                      &
@@ -53,6 +57,9 @@
 #ifdef SHORTWAVE
      &                            srflx,                                &
 #endif
+#ifdef CHANNEL2
+     &                             yr,                                  &
+#endif
 #ifdef TL_IOMS
      &                            tl_stflx,                             &
 #endif
@@ -77,6 +84,9 @@
 # ifdef SHORTWAVE
       real(r8), intent(in) :: srflx(LBi:,LBj:)
 # endif
+#ifdef CHANNEL2
+      real(r8), intent(in) :: yr(LBi:,LBj:) 
+#endif
       real(r8), intent(inout) :: stflx(LBi:,LBj:,:)
 # ifdef TL_IOMS
       real(r8), intent(inout) :: tl_stflx(LBi:,LBj:,:)
@@ -85,6 +95,9 @@
 # ifdef SHORTWAVE
       real(r8), intent(in) :: srflx(LBi:UBi,LBj:UBj)
 # endif
+#ifdef CHANNEL2
+      real(r8), intent(in) :: yr(LBi:UBi,LBj:UBj) 
+#endif
       real(r8), intent(inout) :: stflx(LBi:UBi,LBj:UBj,NT(ng))
 # ifdef TL_IOMS
       real(r8), intent(inout) :: tl_stflx(LBi:UBi,LBj:UBj,NT(ng))
@@ -114,6 +127,21 @@
             stflx(i,j,itrc)=srflx(i,j)
 # ifdef TL_IOMS
             tl_stflx(i,j,itrc)=srflx(i,j)
+# endif
+#elif defined CHANNEL2
+        IF (yr(i,j).lt.(5.0_r8/6.0_r8*el(ng))) THEN 
+            stflx(i,j,itrc)=-10.0_r8/(rho0*cp)*                         &
+     &                      COS(3.0_r8*pi*yr(i,j)/el(ng))
+        ELSE
+            stflx(i,j,itrc)=0.0_r8
+        END IF
+# ifdef TL_IOMS
+        IF (yr(i,j).lt.(5.0_r8/6.0_r8*el(ng)) THEN 
+            tl_stflx(i,j,itrc)=-10.0_r8/(rho0*cp)*                      &
+     &                      COS(3.0_r8*pi*yr(i,j)/el(ng))
+        ELSE
+            tl_stflx(i,j,itrc)=0.0_r8
+        END IF
 # endif
 #else
 !            stflx(i,j,itrc)=srflx(i,j)-tdays(ng)-dstart                 &
